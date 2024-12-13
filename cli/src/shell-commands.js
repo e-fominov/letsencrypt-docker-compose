@@ -20,7 +20,7 @@ const runCommand = async (command, logOutput = true) => {
 
 export const isNginxServiceRunning = async () => {
   const { stdout } = await runCommand('docker compose ps --format json', false);
-  const containers = JSON.parse(stdout);
+  const containers = stdout.split(/\n/).filter((l) => l.length > 2).map((l) => JSON.parse(l));
   return !!containers.find(
     (container) =>
       container.Service === 'nginx' && container.State === 'running'
